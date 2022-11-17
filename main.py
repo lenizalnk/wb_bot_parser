@@ -75,6 +75,12 @@ async def parser():
 
 @dp.message_handler(commands=['begin'], state="*")
 async def send_welcome(message: types.Message):
+    if "https_proxy" in os.environ:
+        proxy = os.environ["https_proxy"]
+        print(f"proxy = " + proxy)
+    else:
+        print("no proxy :(")
+
     await StateMachine.main_state.set()
     await message.answer(f"Халлоу, запомиаю текущую цену и начну опрашивать каждые " + str(n) + " секунд. " +
             "Результат вывожу в нашу группу")
@@ -90,7 +96,7 @@ async def send_welcome(message: types.Message):
                             '&curr=rub'
                             '&couponsGeo=12,7,3,6,18,22,21'
                             '&dest=-1075831,-79374,-367666,-2133462'
-                            '&nm=124415723', proxies=proxy_url)
+                            '&nm=124415723', proxies=proxy)
     data = response.json()
     product = data['data']['products'][0]
     global prev_price
