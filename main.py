@@ -18,6 +18,7 @@ storage = JSONStorage("states.json")
 if "https_proxy" in os.environ:
     proxy_url = os.environ["https_proxy"]
     bot = Bot(token=API_TOKEN, proxy=proxy_url)
+    print(proxy_url)
 else:
     bot = Bot(token=API_TOKEN)
 
@@ -27,7 +28,7 @@ dp = Dispatcher(bot, storage=storage)
 logging.basicConfig(level=logging.INFO)
 
 prev_price = 0
-n = 60  # timer sec
+n = 300  # timer sec
 chat_id = -830090293
 
 
@@ -36,6 +37,7 @@ class StateMachine(StatesGroup):
 
 
 async def parser():
+    print(proxy_url)
     response = requests.get('https://card.wb.ru/cards/detail?spp=0'
                             '&regions=80,64,83,4,38,33,70,82,69,68,86,30,40,48,1,22,66,31'
                             '&pricemarginCoeff=1.0'
@@ -99,6 +101,7 @@ async def send_welcome(message: types.Message):
             "Ссылка: " + "https://www.wildberries.ru/catalog/" + str(product['id']) + "/detail.aspx")
     # await bot.send_photo(chat_id=chat_id, )
     await bot.send_message(chat_id=chat_id, text=text, parse_mode="html")
+
 
 async def scheduled(wait_for):
     while True:
