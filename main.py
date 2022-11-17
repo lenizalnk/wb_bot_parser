@@ -28,7 +28,7 @@ dp = Dispatcher(bot, storage=storage)
 logging.basicConfig(level=logging.INFO)
 
 prev_price = 0
-n = 300  # timer sec
+n = 30  # timer sec
 chat_id = -830090293
 
 
@@ -37,7 +37,7 @@ class StateMachine(StatesGroup):
 
 
 async def parser():
-    print(proxy_url)
+    # print(proxy_url)
     response = requests.get('https://card.wb.ru/cards/detail?spp=0'
                             '&regions=80,64,83,4,38,33,70,82,69,68,86,30,40,48,1,22,66,31'
                             '&pricemarginCoeff=1.0'
@@ -49,7 +49,8 @@ async def parser():
                             '&curr=rub'
                             '&couponsGeo=12,7,3,6,18,22,21'
                             '&dest=-1075831,-79374,-367666,-2133462'
-                            '&nm=124415723', proxies=proxy_url)
+                            # '&nm=124415723', proxies=proxy_url)
+                            '&nm=124415723')
     data = response.json()
     product = data['data']['products'][0]
     price = float(product['salePriceU'] / 100)
@@ -64,8 +65,8 @@ async def parser():
                 "Ссылка: " + "https://www.wildberries.ru/catalog/" + str(product['id']) + "/detail.aspx")
         await bot.send_message(chat_id=chat_id, text=text, parse_mode="html")
         prev_price = price
-    else:
-        await bot.send_message(chat_id=chat_id, text="test")
+    # else:
+    #     await bot.send_message(chat_id=chat_id, text="test")
 
     # print(f"Товар: " + product['name'])
     # print(f"Ссылка: " + "https://www.wildberries.ru/catalog/" + str(product['id']) + "/detail.aspx")
@@ -96,7 +97,8 @@ async def send_welcome(message: types.Message):
                             '&curr=rub'
                             '&couponsGeo=12,7,3,6,18,22,21'
                             '&dest=-1075831,-79374,-367666,-2133462'
-                            '&nm=124415723', proxies=proxy)
+                            # '&nm=124415723', proxies=proxy)
+                            '&nm=124415723')
     data = response.json()
     product = data['data']['products'][0]
     global prev_price
@@ -105,18 +107,16 @@ async def send_welcome(message: types.Message):
     text = (f"Товар: <b>" + product['name'] + "</b> \n" +
             "Текущая цена: <b>" + str(prev_price) + "</b>" + "\n" +
             "Ссылка: " + "https://www.wildberries.ru/catalog/" + str(product['id']) + "/detail.aspx")
-    # await bot.send_photo(chat_id=chat_id, )
     await bot.send_message(chat_id=chat_id, text=text, parse_mode="html")
 
 
 async def scheduled(wait_for):
     while True:
         await asyncio.sleep(wait_for)
-        # print('Опрашиваю сайт')
         await parser()
 
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.create_task(scheduled(n))  # поставим 5 секунд, в качестве теста
+    loop.create_task(scheduled(n))
     executor.start_polling(dp, skip_updates=True)
