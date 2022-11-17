@@ -27,7 +27,7 @@ dp = Dispatcher(bot, storage=storage)
 logging.basicConfig(level=logging.INFO)
 
 prev_price = 0
-n = 5  # timer sec
+n = 60  # timer sec
 chat_id = -830090293
 
 
@@ -62,8 +62,8 @@ async def parser():
                 "Ссылка: " + "https://www.wildberries.ru/catalog/" + str(product['id']) + "/detail.aspx")
         await bot.send_message(chat_id=chat_id, text=text, parse_mode="html")
         prev_price = price
-    # else:
-    #     await bot.send_message(chat_id=chat_id, text="test")
+    else:
+        await bot.send_message(chat_id=chat_id, text="test")
 
     # print(f"Товар: " + product['name'])
     # print(f"Ссылка: " + "https://www.wildberries.ru/catalog/" + str(product['id']) + "/detail.aspx")
