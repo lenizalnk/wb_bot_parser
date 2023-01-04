@@ -28,7 +28,7 @@ dp = Dispatcher(bot, storage=storage)
 logging.basicConfig(level=logging.INFO)
 
 prev_price = 0
-n = 30  # timer sec
+n = 90  # timer sec
 chat_id = -830090293
 
 
@@ -50,7 +50,7 @@ async def parser():
                             '&couponsGeo=12,7,3,6,18,22,21'
                             '&dest=-1075831,-79374,-367666,-2133462'
                             # '&nm=124415723', proxies=proxy_url)
-                            '&nm=124415723')
+                            '&nm=140524178')
     data = response.json()
     product = data['data']['products'][0]
     price = float(product['salePriceU'] / 100)
@@ -98,7 +98,7 @@ async def send_welcome(message: types.Message):
                             '&couponsGeo=12,7,3,6,18,22,21'
                             '&dest=-1075831,-79374,-367666,-2133462'
                             # '&nm=124415723', proxies=proxy)
-                            '&nm=124415723')
+                            '&nm=140524178')
     data = response.json()
     product = data['data']['products'][0]
     global prev_price
